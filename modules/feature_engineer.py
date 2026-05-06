@@ -1,12 +1,11 @@
 # ============================================================
-# modules/feature_engineer.py — Feature Selection & SMOTE
+# modules/feature_engineer.py — Feature Selection
 # ============================================================
 
 import numpy as np
 import pandas as pd
 from sklearn.feature_selection import SelectKBest, mutual_info_classif, chi2, RFE
 from sklearn.ensemble import RandomForestClassifier
-from imblearn.over_sampling import SMOTE
 
 from config import (
     USE_FEATURE_SELECTION, N_FEATURES_TO_SELECT, FEATURE_METHOD,
@@ -107,31 +106,3 @@ def get_feature_importance(
         df = pd.DataFrame()
 
     return df
-
-
-# ── Handle Imbalanced Data ───────────────────────────────────
-
-def apply_smote(
-    X_train: np.ndarray,
-    y_train: np.ndarray,
-) -> tuple[np.ndarray, np.ndarray]:
-    """
-    Terapkan SMOTE pada data training untuk menangani class imbalance.
-    SMOTE hanya diterapkan pada data training (tidak pada test).
-    """
-    if not USE_SMOTE:
-        print("[FeatureEngineer] SMOTE dinonaktifkan.")
-        return X_train, y_train
-
-    from collections import Counter
-    print(f"\n[FeatureEngineer] Distribusi sebelum SMOTE: {Counter(y_train)}")
-
-    smote = SMOTE(
-        sampling_strategy=SMOTE_STRATEGY,
-        k_neighbors=SMOTE_K_NEIGHBORS,
-        random_state=RANDOM_STATE,
-    )
-    X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
-
-    print(f"[FeatureEngineer] ✅ Distribusi setelah SMOTE : {Counter(y_resampled)}")
-    return X_resampled, y_resampled

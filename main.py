@@ -58,8 +58,10 @@ def main():
     df_importance = get_feature_importance(feature_names, selector)
     plot_feature_importance(df_importance)
 
-    # ── 6. SMOTE ─────────────────────────────────────────────
-    X_train_bal, y_train_bal = apply_smote(X_train_sel, y_train)
+    # # ── 6. SMOTE ─────────────────────────────────────────────
+    # X_train_bal, y_train_bal = apply_smote(X_train_sel, y_train)
+    X_train_bal = X_train_sel
+    y_train_bal = y_train
 
     # ── 7. Cross-Validation ──────────────────────────────────
     cross_validate_all(X_train_bal, y_train_bal)
